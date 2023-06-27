@@ -1,101 +1,132 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import NewsItem from './NewsItem'
 import Spinner from './Spinner';
+import InfiniteScroll from 'react-infinite-scroll-component'
 
-export class News extends Component {
+const News = (props) => {
 
-    async componentDidMount() {
-        this.setState({ Loading: true })
-        let data = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=a7b241237ff14a228d9ed11bc2f9d61d`);
+    const [articles, setArticles] = useState([]);
+    const [Page, setPage] = useState(1);
+    const [MaxPage, setMaxPage] = useState(0);
+    const [Loading, setLoading] = useState(true);
+
+    const UpdateNews = async () => {
+        setLoading(true);
+        props.setProgress(0);
+        let data = await fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${Page}&pageSize=${props.pageSize}`);
+        props.setProgress(40);
         let parsedData = await data.json();
+        props.setProgress(60);
         let totalResults = parsedData.totalResults;
-        this.setState({ articles: parsedData.articles, MaxPage: Math.ceil(totalResults / this.props.pageSize), Loading: false });
+        setArticles(parsedData.articles);
+        props.setProgress(80);
+        setMaxPage(Math.ceil(totalResults / props.pageSize));
+        props.setProgress(100);
+        setLoading(false);
 
     }
+    const fetchData = async () => {
+        props.setProgress(20);
+        let data = await fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${Page+1}&pageSize=${props.pageSize}`);
+        props.setProgress(50);
+        setPage(Page + 1);
+        let parsedData = await data.json();
+        props.setProgress(70);
+        setArticles(articles.concat(parsedData.articles));
+        props.setProgress(100);
+    }
 
-    constructor() {
-        super();
-        this.state = {
-            articles: [], description: '', Index: 0, Page: 1, MaxPage: 0
+    useEffect(() => {
+        /* eslint-disable */
+        UpdateNews();
+        document.title = `${props.category.charAt(0).toUpperCase() + props.category.substring(1, props.category.length)} with Newsicles`;
+    }, [props.country]);
+
+
+    const PrintCountry = () => {
+
+        switch (props.country) {
+            case 'us': return 'USA'; break;
+            case 'ar': return 'Argentina'; break;
+            case 'au': return 'Australia'; break;
+            case 'br': return 'Brazil'; break;
+            case 'ca': return 'Canada'; break;
+            case 'cn': return 'China'; break;
+            case 'de': return 'German'; break;
+            case 'fr': return 'France'; break;
+            case 'gb': return 'UK'; break;
+            case 'jp': return 'Japan'; break;
+            case 'in': return 'India'; break;
+            default: return 'USA';
         }
     }
 
-    HandleButtonChangeOnNewNews() {
-        let ActiveButton = document.getElementsByTagName('button');
-        for (let i = 0; i < ActiveButton.length; i++) {
-            if (ActiveButton[i].classList.contains('active'))
-                ActiveButton[i].classList.remove('active');
-        }
-        console.log(ActiveButton[0].key);
+    const MoreNews = async () => {
+        setPage(Page + 1);
+        UpdateNews();
     }
 
-    render() {
+    const LessNews = async () => {
+        setPage(Page - 1);
+        UpdateNews();
+    }
 
-        const MoreNews = async () => {
-            this.setState({ Loading: true });
-            let data = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=a7b241237ff14a228d9ed11bc2f9d61d&page=${this.state.Page + 1}&pageSize=${this.props.pageSize}`);
-            let parsedData = await data.json();
-            this.setState({ articles: parsedData.articles, Page: this.state.Page + 1, Loading: false });
-        }
-        const LessNews = async () => {
-            this.setState({ Loading: true });
-            let data = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=a7b241237ff14a228d9ed11bc2f9d61d&page=${this.state.Page - 1}&pageSize=${this.props.pageSize}`);
-            let parsedData = await data.json();
-            this.setState({ articles: parsedData.articles, Page: this.state.Page - 1, Loading: false });
-        }
 
-        
-        return (
+    return (
+        <>
+            <div className='my-3 mb-5'>
+                <div className="container my-5 mt-100 border border-dark" >
+                    <h1 className='text-center my-2'>{props.MainTitle}{PrintCountry()}</h1>
 
-            <div>
-                <div className="container my-5 border border-dark" >
-                    <h1 className='text-center my-2'>{this.props.MainTitle}</h1>
+                    {Loading && <Spinner />}
+                    <InfiniteScroll
+                        dataLength={articles.length}
+                        next={fetchData}
+                        hasMore={Page < MaxPage }
+                        loader={<Spinner/>}
+                    >
+                        <div id="carouselExampleCaptions" className="carousel slide m-3">
 
-                    {this.state.Loading && <Spinner />}
-
-                    <div id="carouselExampleCaptions" className="carousel slide m-3">
-
-                        <div className="carousel-indicators">
-                            {
-                                this.state.articles.map((element) => {
-                                    return <button type="button" key={this.state.articles.indexOf(element)} data-bs-target="#carouselExampleCaptions" data-bs-slide-to={this.state.articles.indexOf(element)} className={element === this.state.articles[0] ? 'active' : ''} aria-current={element === this.state.articles[0] ? 'true' : ''} aria-label={(1 + this.state.articles.indexOf(element))}>
-                                    </button>
+                            <div className="carousel-indicators">
+                                {
+                                    articles.map((element) => {
+                                        return <button type="button" key={articles.indexOf(element)} data-bs-target="#carouselExampleCaptions" data-bs-slide-to={articles.indexOf(element)} className={element === articles[0] ? 'active' : ''} aria-current={element === articles[0] ? 'true' : ''} aria-label={(1 + articles.indexOf(element))}>
+                                        </button>
+                                    }
+                                    )
                                 }
-                                )
-                            }
+                            </div>
+
+                            <div className="carousel-inner">
+
+                                {articles.map((element) => {
+
+                                    return (!Loading) && <div className={`carousel-item${element === articles[0] ? ' active' : ' '}`} key={element.url}>
+                                        <NewsItem newsUrl={element.url} ImageUrl={element.urlToImage} ImageTitle={element.title} ImageDescription={element.description} />
+                                    </div>
+                                })}
+
+
+                            </div>
+
+                            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Previous</span>
+                            </button>
+                            <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Next</span>
+                            </button>
                         </div>
+                    </InfiniteScroll>
 
-                        <div className="carousel-inner">
-
-                            {this.state.articles.map((element) => {
-
-                                return (!this.state.Loading) && <div className={`carousel-item${element === this.state.articles[0] ? ' active' : ' '}`} key={element.url}>
-                                    <NewsItem newsUrl={element.url} ImageUrl={element.urlToImage} ImageTitle={element.title} ImageDescription={element.description} />
-                                </div>
-                            })}
-
-
-                        </div>
-
-                        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span className="visually-hidden">Previous</span>
-                        </button>
-                        <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span className="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                    <h5>Description :</h5><br />
-                    <p>{this.state.description}</p>
                 </div >
-                <div className='container d-flex justify-content-between'  >
-                    <button disabled={this.state.Page <= 1} type="button" className='btn btn-secondary' onClick={LessNews}>&larr;  View Previous Headlines</button>
-                    <button type="button" disabled={this.state.Page >= this.state.MaxPage} className='btn btn-secondary' onClick={MoreNews}>View More Headlines  &rarr;</button>
-                </div>
+               
             </div>
-        )
-    }
+
+        </>
+    )
+
 }
 
 export default News
