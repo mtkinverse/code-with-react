@@ -1,0 +1,71 @@
+{
+    "status": "ok",
+    "totalResults": 5,
+    "articles": [
+        {
+            "source": {
+                "id": "cnn",
+                "name": "CNN"
+            },
+            "author": "Tierney Sneed",
+            "title": "Judge issues order that Trump keep quiet about disclosure of discovery material issued in classified documents case | CNN Politics",
+            "description": "A magistrate judge has signed off on special counsel Jack Smith’s request that former President Donald Trump and his co-defendant Walt Nauta be prohibited from disclosing information the discovery handed over to the defense in the criminal case Trump and Naut…",
+            "url": "https://www.cnn.com/2023/06/19/politics/trump-disclosure-information/index.html",
+            "urlToImage": "https://media.cnn.com/api/v1/images/stellar/prod/230619091729-01-donald-trump-230613-file.jpg?c=16x9&q=w_800,c_fill",
+            "publishedAt": "2023-06-19T14:15:09Z",
+            "content": "A magistrate judge has signed off on special counsel Jack Smiths request that former President Donald Trump and his co-defendant Walt Nauta be prohibited from disclosing information the discovery han… [+1754 chars]"
+        },
+        {
+            "source": {
+                "id": "cnn",
+                "name": "CNN"
+            },
+            "author": "",
+            "title": "Video: Will Trump go to jail if convicted? Hear what George Conway thinks | CNN Politics",
+            "description": "Conservative lawyer George Conway discusses the potential repercussions facing Donald Trump after the former president was indicted as a result of the Justice Department’s probe of his handling of classified documents.",
+            "url": "https://www.cnn.com/videos/politics/2023/06/18/conway-prediction-trump-indictment-acostanr-vpx.cnn",
+            "urlToImage": "https://media.cnn.com/api/v1/images/stellar/prod/230617202038-conway-trump-split-vpx.jpg?c=16x9&q=w_800,c_fill",
+            "publishedAt": "2023-06-18T00:30:37Z",
+            "content": null
+        },
+        {
+            "source": {
+                "id": "newsweek",
+                "name": "Newsweek"
+            },
+            "author": "Mark Davis",
+            "title": "Newsweek",
+            "description": "Newsweek provides in-depth analysis, news and opinion about international issues, technology, business, culture and politics.",
+            "url": "https://www.newsweek.com/",
+            "urlToImage": "https://d.newsweek.com/en/full/2202468/special-presidential-envoy-climate-john-kerry.jpg",
+            "publishedAt": "2023-03-01T12:07:28.8517009Z",
+            "content": null
+        },
+        {
+            "source": {
+                "id": "the-american-conservative",
+                "name": "The American Conservative"
+            },
+            "author": null,
+            "title": "Politics Archives - The American Conservative",
+            "description": null,
+            "url": "https://www.theamericanconservative.com/category/politics/",
+            "urlToImage": null,
+            "publishedAt": "2022-07-07T21:37:27.3936289Z",
+            "content": null
+        },
+        {
+            "source": {
+                "id": "the-jerusalem-post",
+                "name": "The Jerusalem Post"
+            },
+            "author": null,
+            "title": "Congresswoman Nita Lowey: I am proud to stand with Israel",
+            "description": "Gantz: Security of Israel is above politics; PA: This is a crime.",
+            "url": "https://www.jpost.com/Arab-Israeli-Conflict/Gantz-Security-of-Israel-is-above-politics-Palestinians-This-is-a-crime-607595",
+            "urlToImage": "https://images.jpost.com/image/upload/f_auto,fl_lossy/t_Article2016_ControlFaceDetect/448812",
+            "publishedAt": "2019-11-13T04:41:00Z",
+            "content": "US Ambassador David M. Friedman said the US stands “with our friend and ally Israel at this critical moment” on social media on Tuesday after roughly 170 rockets were fired on Israel from the Gaza St… [+6160 chars]"
+        }
+    ]
+}
