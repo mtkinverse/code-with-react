@@ -1,24 +1,37 @@
 import React from 'react'
+import { useContext,useState } from 'react';
+import noteContext from '../context/notes/noteContext';
 
 function AddNotes() {
+  const context = useContext(noteContext);
+  const { addNote } = context;
+  const tmepNote = { title:'',description:'',comments : 'Default comment'}
+ const [currentNote,setCurrentNote] = useState(tmepNote);
+
+const SubmitIt = (event)=>{
+  event.preventDefault();
+ addNote(currentNote.title,currentNote.description,currentNote.comments);
+ document.getElementById('title').value = '';
+ document.getElementById('description').value = '';
+}
+  
+ const onChange =(e)=>{
+ setCurrentNote({...currentNote,[e.target.name] : e.target.value});
+  }
   return (
-    <div className='container my-2'>
+    <div className='my-2'>
         <h3>Add a new note :</h3>
       <form className='my-2'>
   <div className="mb-3">
-    <label for="exampleInputEmail1" className="form-label">Email address</label>
-    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
-    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
-  </div>
+    <label htmlFor="title" className="form-label">Enter Title :</label>
+    <input type="text" className="form-control" id="title" name='title' aria-describedby="emailHelp" onChange={onChange}/>
+     </div>
   <div className="mb-3">
-    <label for="exampleInputPassword1" className="form-label">Password</label>
-    <input type="password" className="form-control" id="exampleInputPassword1"/>
+    <label htmlFor="description" className="form-label">Enter Description :</label>
+    <input type="text" className="form-control" id="description" name="description" onChange={onChange}/>
   </div>
-  <div className="mb-3 form-check">
-    <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-    <label className="form-check-label" for="exampleCheck1">Check me out</label>
-  </div>
-  <button type="submit" className="btn btn-primary">Submit</button>
+
+  <button type="submit" className="btn btn-primary" onClick={SubmitIt}>Submit</button>
 </form>
     </div>
   )
