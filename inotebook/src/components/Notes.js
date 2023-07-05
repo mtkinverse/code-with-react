@@ -7,14 +7,14 @@ function Notes() {
     const context = useContext(noteContext);
     const { notes } = context;
 
-  return (
-    <div className='row my-3'>{notes.map((element)=>{
-        return <NotesContent key={element._id} note = {element} />
-    })
+    return (
+        <div className='row my-3'>{notes.map((element) => {
+            return <NotesContent key={element._id} note={element} />
+        })
         }
-      
-    </div>
-  )
+
+        </div>
+    )
 }
 
 export default Notes
