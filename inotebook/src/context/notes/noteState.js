@@ -26,48 +26,59 @@ const NoteState = ({ children }) => {
     })
     const data = await response.json();
     setNotes(data);
-    ShowAlert("All the notes uploaded",'success');
   }
 
   const addNote = async (title, description, comments) => {
     //Adding in the data base
-    await fetch(`${host}/notes/addnewnote`,{
-      method:'POST',
+    await fetch(`${host}/notes/addnewnote`, {
+      method: 'POST',
       headers: {
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5ZGNlODM5M2RlZGMzYjFlNTViZjA4In0sImlhdCI6MTY4ODEyMzkwNX0.LV07pnYretFmPwczmhDDoNavyQG_KJJWvtkzKrdWNFw",
         "Content-Type": "application/json"
 
       },
-      body:JSON.stringify({title, description, comments})
+      body: JSON.stringify({ title, description, comments })
     })
+    // Ading on client side
+    getNotes();
 
-    const newnote = {
-      "_id": "64a19e7057f0f3e60257302a",
-      "user": "649dce8393dedc3b1e55bf08",
-      "title": title,
-      "description": description,
-      "comments": comments,
-      "date": "1688313456771",
-      "__v": 0
-    }
-    setNotes(notes.concat(newnote));
+    ShowAlert('A new note added successfully !', 'success');
 
-    ShowAlert('A new note added successfully !' , 'success');
-    
   }
 
-  const deleteNote = async(id) => {
+  const updateNote = async (title, description, comments, id) => {
+    await fetch(`${host}/notes/updatenote/${id}`, {
+      method: 'PUT',
+      headers: {
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5ZGNlODM5M2RlZGMzYjFlNTViZjA4In0sImlhdCI6MTY4ODEyMzkwNX0.LV07pnYretFmPwczmhDDoNavyQG_KJJWvtkzKrdWNFw",
+        "Content-Type": "application/json"
+
+      },
+      body: JSON.stringify({ title, description, comments })
+    });
+
+    for (let i = 0; i < notes.length; i++) {
+      if (notes[i]._id === id) {
+        notes[i].title = title;
+        notes[i].description = description;
+        notes[i].comments = comments;
+      }
+      ShowAlert('Successfully Updated', 'success');
+    }
+  }
+
+  const deleteNote = async (id) => {
     //Deleting from backend
-    const response = await fetch(`${host}/notes/deletenote/${id}`,{
-      method : 'DELETE',
-      headers : {
+    const response = await fetch(`${host}/notes/deletenote/${id}`, {
+      method: 'DELETE',
+      headers: {
 
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5ZGNlODM5M2RlZGMzYjFlNTViZjA4In0sImlhdCI6MTY4ODEyMzkwNX0.LV07pnYretFmPwczmhDDoNavyQG_KJJWvtkzKrdWNFw",
         "Content-Type": "application/json"
 
       }
     })
-    const data =await response.json();
+    const data = await response.json();
     const newnotes = notes.filter((element) => { return element._id !== id });
     setNotes(newnotes);
     ShowAlert(`A note with title ${data.note.title} has been deleted`, 'danger');
@@ -75,7 +86,7 @@ const NoteState = ({ children }) => {
   }
 
   return (
-    <NoteContext.Provider value={{ notes, addNote, deleteNote, AlertContent, ShowAlert,getNotes }}>
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, AlertContent, ShowAlert, getNotes, updateNote }}>
       {children}
     </NoteContext.Provider>
   )
