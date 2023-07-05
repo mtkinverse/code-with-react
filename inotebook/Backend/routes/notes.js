@@ -77,11 +77,9 @@ router.delete('/deletenote/:id', fetchUser, async (req, res) => {
 
         if (!note) { return res.status(404).send("No note is found against the specified id ! ") }
         if (note.user.toString() !== req.user.id) { return res.status(401).send("Unauthorized person not allowed ! ") }
-        console.log('reacherd here');
+        
         note =await Notes.findByIdAndDelete(req.params.id);
-        console.log('reacherd here');
         res.json({ Deleted: 'notes deleted successfully !', note: note });
-        console.log('reacherd here');
 
     } catch (error) {
         console.error(error.message);
