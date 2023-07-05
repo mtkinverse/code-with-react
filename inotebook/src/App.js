@@ -8,18 +8,18 @@ import Alert from "./components/Alert";
 function App() {
   return (
     <NoteState>
-    <BrowserRouter>
-    <Navbar/>
-    <div className="container my-2">
-      <Alert />
-    </div>
-    <div className="container my-3">
-    <Routes>
-    <Route index element={<Home/>}/>
-    <Route path="/about" element={<About/>}/>
-    </Routes>
-    </div>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Navbar />
+        <div className="sticky-top container my-2">
+          <Alert />
+        </div>
+        <div className="container my-3">
+          <Routes>
+            <Route index element={<Home />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </NoteState>
   );
 }
