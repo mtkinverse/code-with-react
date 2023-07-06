@@ -66,6 +66,9 @@ function Notes() {
                 </div>
             </div>
 
+            <div className={`container my-2 ${notes.length?'d-none':''}`}>
+                <h5>No note to be displayed !</h5>
+            </div>
 
             <div className='row my-3'>{notes.map((element) => {
                 return <NotesContent key={element._id} note={element} UpdateNote={LetNoteEdit} />

@@ -26,7 +26,7 @@ const NoteState = ({ children }) => {
     })
     const data = await response.json();
     setNotes(data);
-    ShowAlert('All the notes uploaded !','success');
+    ShowAlert('All the notes uploaded !', 'success');
   }
 
   const addNote = async (title, description, comments) => {
@@ -40,13 +40,12 @@ const NoteState = ({ children }) => {
       },
       body: JSON.stringify({ title, description, comments })
     })
-    
+
     // Ading on client side
 
     const AddedNote = await response.json();
-console.log(AddedNote);
     setNotes(notes.concat(AddedNote.savedNote));
-    
+
 
     ShowAlert('A new note added successfully !', 'success');
 
