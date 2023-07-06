@@ -26,11 +26,12 @@ const NoteState = ({ children }) => {
     })
     const data = await response.json();
     setNotes(data);
+    ShowAlert('All the notes uploaded !','success');
   }
 
   const addNote = async (title, description, comments) => {
     //Adding in the data base
-    await fetch(`${host}/notes/addnewnote`, {
+    const response = await fetch(`${host}/notes/addnewnote`, {
       method: 'POST',
       headers: {
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5ZGNlODM5M2RlZGMzYjFlNTViZjA4In0sImlhdCI6MTY4ODEyMzkwNX0.LV07pnYretFmPwczmhDDoNavyQG_KJJWvtkzKrdWNFw",
@@ -39,8 +40,13 @@ const NoteState = ({ children }) => {
       },
       body: JSON.stringify({ title, description, comments })
     })
+    
     // Ading on client side
-    getNotes();
+
+    const AddedNote = await response.json();
+console.log(AddedNote);
+    setNotes(notes.concat(AddedNote.savedNote));
+    
 
     ShowAlert('A new note added successfully !', 'success');
 
