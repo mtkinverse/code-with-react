@@ -16,6 +16,7 @@ const NoteState = ({ children }) => {
   }
 
   const getNotes = async () => {
+    //RaoKaEmail - authToken : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5ZGNlODM5M2RlZGMzYjFlNTViZjA4In0sImlhdCI6MTY4ODEyMzkwNX0.LV07pnYretFmPwczmhDDoNavyQG_KJJWvtkzKrdWNFw
     const response = await fetch(`${host}/notes/fetchall`, {
       method: 'GET',
       headers: {
@@ -26,6 +27,7 @@ const NoteState = ({ children }) => {
     })
     const data = await response.json();
     setNotes(data);
+    if(data.length > 0)
     ShowAlert('All the notes uploaded !', 'success');
   }
 
@@ -38,7 +40,7 @@ const NoteState = ({ children }) => {
         "Content-Type": "application/json"
 
       },
-      body: JSON.stringify({ title, description, comments })
+      body: JSON.stringify({ title, description, comments:comments.length>0 ? comments : null })
     })
 
     // Ading on client side
@@ -86,7 +88,7 @@ const NoteState = ({ children }) => {
     const data = await response.json();
     const newnotes = notes.filter((element) => { return element._id !== id });
     setNotes(newnotes);
-    ShowAlert(`A note with title ${data.note.title} has been deleted`, 'danger');
+    ShowAlert(`A note with title "${data.note.title}" has been deleted`, 'danger');
 
   }
 

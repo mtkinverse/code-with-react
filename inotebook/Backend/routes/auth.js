@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Signature = 'A_SecretPassword_ForSignature';
 const fetchUser = require('../middleware/fetchuser');
-
+const success = false;
 // if(Signature === null){console.log("Not found ")}else {console.log(Signature)};
 // ==>> ROUTE 1 ; Creating User , endpoint : /api/auth/createUser
 router.post('/createUser', [
@@ -21,13 +21,13 @@ router.post('/createUser', [
 
             if (await User.findOne({ email: req.body.email })) {
                 //User module can invoke a findOne() method (async, have to wait) for signup (creating user) purpose no user should be found having the same email ; therefore, if it comes true we dont have to bother the server and return from here with a bad status (400) and error message 
-                return res.status(400).json({ error: 'A user with the email address already exist ; please enter a unique email address' })
+                return res.status(400).json({ success,error: 'A user with the email address already exist ; please enter a unique email address' })
             }
 
             const result = validationResult(req);// this will validate result according to the defined body and conditions with bcrypt
             if (!result.isEmpty()) {
                 //if this result is !empty this , state that it contains error
-                return res.status(400).json({ result: result.array() });
+                return res.status(400).json({ success,error: result.array() });
             }
 
 
@@ -47,12 +47,12 @@ router.post('/createUser', [
             }
             const authToken = jwt.sign(data, Signature);//jsonwebtoken requires an object , which is data here , and the signature 
 
-            res.json({ authToken });
+            res.json({ success:!success,authToken });
 
         } catch (error) {
 
             console.error(error.message);
-            res.status(500).send("Something went wrong ! ");
+            res.status(500).json({success,error:"Something went wrong ! "});
 
         }
     })
@@ -63,7 +63,7 @@ router.post('/login', [
     body('email', 'Enter a valid Email').isEmail(),
     body('password', 'Password cannot be blank').exists()
 ], async (req, res) => {
-    let success = false;
+   
     const result = validationResult(req);
 
     if (!result.isEmpty()) {
@@ -89,8 +89,8 @@ router.post('/login', [
             }
         }
         const authToken = jwt.sign(data, Signature);
-        success = true;
-        res.json({success,authToken });
+        
+        res.json({success:!success,authToken });
 
     } catch (error) {
 
