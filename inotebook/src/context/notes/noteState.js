@@ -12,7 +12,7 @@ const NoteState = ({ children }) => {
 
     setTimeout(() => {
       AlertIt(null);
-    }, 1500);
+    }, 2500);
   }
 
   const getNotes = async () => {
