@@ -1,18 +1,31 @@
-import React, { useEffect, useRef , useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useContext } from 'react';
 import noteContext from '../context/notes/noteContext';
 import NotesContent from './NotesContent';
+import { useNavigate } from 'react-router-dom';
 
 function Notes() {
-    
+
     const ref = useRef(null);
+    const navigate = useNavigate();
     const CloseButton = useRef(null);
     const context = useContext(noteContext);
     const { notes, getNotes, updateNote } = context;
-    const [currentNote, setCurrentNote] = useState({titleEdit:'',descriptionEdit : '',commentsEdit : '',id:''});
+    const [currentNote, setCurrentNote] = useState({ titleEdit: '', descriptionEdit: '', commentsEdit: '', id: '' });
 
     useEffect(() => {
-        getNotes();
+        async function SeekData() {
+            await context.GetUser();
+            getNotes();
+        }
+
+        if (localStorage.getItem('auth-token')) {
+            SeekData();
+        }
+        else {
+            navigate('/login');
+        }
+
         // eslint-disable-next-line
     }, []);
 
@@ -20,13 +33,13 @@ function Notes() {
         setCurrentNote({ ...currentNote, [e.target.name]: e.target.value });
     }
 
-    const EditNotes = ()=>{
-        updateNote(currentNote.titleEdit,currentNote.descriptionEdit,currentNote.commentsEdit,currentNote.id);
+    const EditNotes = () => {
+        updateNote(currentNote.titleEdit, currentNote.descriptionEdit, currentNote.commentsEdit, currentNote.id);
         CloseButton.current.click();
     }
 
-    const LetNoteEdit = (Newnote)=>{
-        setCurrentNote({titleEdit:Newnote.title,descriptionEdit:Newnote.description,commentsEdit:Newnote.comments,id:Newnote._id});
+    const LetNoteEdit = (Newnote) => {
+        setCurrentNote({ titleEdit: Newnote.title, descriptionEdit: Newnote.description, commentsEdit: Newnote.comments, id: Newnote._id });
         ref.current.click();
     }
 
@@ -54,19 +67,19 @@ function Notes() {
                                     <input type="text" className="form-control" id="commentsEdit" name="commentsEdit" onChange={onChange} value={currentNote.commentsEdit} placeholder='Some words for your note' />
                                 </div>
                                 <label htmlFor="descriptionEdit" className="form-label"><h6>Enter Description :</h6></label>
-                                <textarea className="form-control" id="descriptionEdit"  name="descriptionEdit" rows="8" onChange={onChange} placeholder='Desciption of your note' value={currentNote.descriptionEdit}></textarea>
+                                <textarea className="form-control" id="descriptionEdit" name="descriptionEdit" rows="8" onChange={onChange} placeholder='Desciption of your note' value={currentNote.descriptionEdit}></textarea>
 
                             </form>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" ref={CloseButton} data-bs-dismiss="modal">Close</button>
-                            <button disabled={currentNote.titleEdit.length <=3 || currentNote.descriptionEdit.length <=5} type="button" className="btn btn-primary" onClick={EditNotes}>Save changes</button>
+                            <button disabled={currentNote.titleEdit.length <= 3 || currentNote.descriptionEdit.length <= 5} type="button" className="btn btn-primary" onClick={EditNotes}>Save changes</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className={`container my-2 ${notes.length?'d-none':''}`}>
+            <div className={`container my-2 ${notes.length ? 'd-none' : ''}`}>
                 <h5>No note to be displayed !</h5>
             </div>
 

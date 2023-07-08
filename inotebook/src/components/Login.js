@@ -38,6 +38,7 @@ function Login() {
     return (
 
         <div className='container my-2'>
+            <h4>Please Login to <code style={{ fontSize: 'xx-large' }}>iNoteBook</code></h4>
             <form onSubmit={CheckUser}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>

@@ -38,6 +38,7 @@ function Signup() {
 
   return (
     <div className='container my-2'>
+      <h4>Please Signup to <code style={{ fontSize: 'xx-large' }}>iNoteBook</code></h4>
       <form onSubmit={CreateUser}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Name :</label>
