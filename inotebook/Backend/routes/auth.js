@@ -21,13 +21,13 @@ router.post('/createUser', [
 
             if (await User.findOne({ email: req.body.email })) {
                 //User module can invoke a findOne() method (async, have to wait) for signup (creating user) purpose no user should be found having the same email ; therefore, if it comes true we dont have to bother the server and return from here with a bad status (400) and error message 
-                return res.status(400).json({ success,error: 'A user with the email address already exist ; please enter a unique email address' })
+                return res.status(400).json({ success, error: 'A user with the email address already exist ; please enter a unique email address' })
             }
 
             const result = validationResult(req);// this will validate result according to the defined body and conditions with bcrypt
             if (!result.isEmpty()) {
                 //if this result is !empty this , state that it contains error
-                return res.status(400).json({ success,error: result.array() });
+                return res.status(400).json({ success, error: result.array() });
             }
 
 
@@ -47,12 +47,12 @@ router.post('/createUser', [
             }
             const authToken = jwt.sign(data, Signature);//jsonwebtoken requires an object , which is data here , and the signature 
 
-            res.json({ success:!success,authToken });
+            res.json({ success: !success, authToken });
 
         } catch (error) {
 
             console.error(error.message);
-            res.status(500).json({success,error:"Something went wrong ! "});
+            res.status(500).json({ success, error: "Something went wrong ! " });
 
         }
     })
@@ -63,11 +63,11 @@ router.post('/login', [
     body('email', 'Enter a valid Email').isEmail(),
     body('password', 'Password cannot be blank').exists()
 ], async (req, res) => {
-   
+
     const result = validationResult(req);
 
     if (!result.isEmpty()) {
-        return res.status(400).json({success, error: result.array() })
+        return res.status(400).json({ success, error: result.array() })
     }
 
     const { email, password } = req.body;
@@ -77,11 +77,11 @@ router.post('/login', [
         const user = await User.findOne({ email })
 
         if (!user) {
-            return res.status(400).json({success, error: 'Kindly be precised while entering your data' });
+            return res.status(400).json({ success, error: 'Kindly be precised while entering your data' });
         }
 
         if (!(await bcrypt.compare(password, user.password))) {
-            return res.status(400).json({success, error: 'Kndly be precised while entering your credentials' });
+            return res.status(400).json({ success, error: 'Kndly be precised while entering your credentials' });
         }
         const data = {
             user: {
@@ -89,13 +89,13 @@ router.post('/login', [
             }
         }
         const authToken = jwt.sign(data, Signature);
-        
-        res.json({success:!success,authToken });
+
+        res.json({ success: !success, authToken });
 
     } catch (error) {
 
         console.error(error.message);
-        res.status(500).json({success,error:"An internal sever error occured !"});
+        res.status(500).json({ success, error: "An internal sever error occured !" });
 
     }
 
@@ -115,6 +115,38 @@ router.post('/seekUser', fetchUser, async (req, res) => {
         res.status(500).send("An internal server error occured !");
     }
 
+})
+
+// Route 4 : Trying to edit the user 
+
+router.put('/updateUser/:id', fetchUser, async (req, res) => {
+
+    const { name, email, oldpassword, newpassword } = req.body;
+
+    const ToUpdate = {}
+    if (name) { ToUpdate.name = name }
+    if (email) { ToUpdate.email = email }
+    if (newpassword) {
+        const salt = await bcrypt.genSalt(10);//using bcrypt builtin function genSalt() of 10 chars
+        const secPass = await bcrypt.hash(newpassword, salt);// generating hash w.r.t the generated salt
+        ToUpdate.password = secPass
+    }
+
+    try {
+
+        const findUser = await User.findById(req.user.id);
+        if (!(await bcrypt.compare(oldpassword, findUser.password))) { return res.status(401).json({ success, error: 'Unauthorized person not allowed !', findUser }) }
+
+
+
+        const UpdatedUser = await User.findByIdAndUpdate(req.params.id, { $set: ToUpdate }, { new: true });
+
+        res.json({ success: !success, UpdatedUser })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success, error: 'An internal server error occured' })
+    }
 })
 
 module.exports = router;

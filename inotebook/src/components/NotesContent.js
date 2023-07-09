@@ -29,7 +29,7 @@ function NotesContent(props) {
                                 <i className="fa-solid fa-pen mx-2" onClick={() => { props.UpdateNote(props.note) }}></i>
                             </span>
                             <span>
-                                {context.PrintDate() + ' | ' + PrintTime()}
+                                {context.PrintDate(props.note.date) + ' | ' + PrintTime()}
                             </span>
                         </div>
                     </div>

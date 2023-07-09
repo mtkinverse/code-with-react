@@ -42,12 +42,12 @@ function Login() {
             <form onSubmit={CheckUser}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>
-                    <input type="email" className="form-control" id="email" name="email" value={Values.email} onChange={onChange} aria-describedby="emailHelp" />
+                    <input type="email" className="form-control" id="email" name="email" value={Values.email} onChange={onChange} aria-describedby="emailHelp" required/>
 
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" id="password" name="password" value={Values.password} onChange={onChange} />
+                    <input type="password" className="form-control" id="password" name="password" value={Values.password} onChange={onChange} required/>
                 </div>
 
                 <button type="submit" className="btn btn-dark">Submit</button>

@@ -8,7 +8,7 @@ const NoteState = ({ children }) => {
   const host = 'http://localhost:5000/api';
   const [notes, setNotes] = useState([]);
   const [AlertContent, AlertIt] = useState({});
-  const [UserData , setUserData] = useState({name:'',date:'',email:''});
+  const [UserData , setUserData] = useState({name:'',date:'',email:'',id:''});
 
   const ShowAlert = (message, type) => {
     AlertIt({ message, type });
@@ -18,9 +18,9 @@ const NoteState = ({ children }) => {
     }, 2500);
   }
 
-  const PrintDate = () => {
+  const PrintDate = (DateInMs) => {
     // return date.getDay();  
-    const date = new Date(parseInt(UserData.date));      
+    const date = new Date(parseInt(DateInMs));      
     const format = { day: '2-digit', month: '2-digit', year: '2-digit' };
     return date.toLocaleDateString(undefined, format);
     // 
@@ -34,7 +34,7 @@ const NoteState = ({ children }) => {
       }
     })
     const res = await req.json();
-    setUserData({name : res.name,date:res.date,email:res.email});
+    setUserData({name : res.name,date:res.date,email:res.email,id:res._id});
 
   }
 
