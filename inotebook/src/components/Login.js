@@ -47,7 +47,7 @@ function Login() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" id="password" name="password" value={Values.password} onChange={onChange} required/>
+                    <input type="password" className="form-control" id="password" name="password" value={Values.password} onChange={onChange}minLength={4} required/>
                 </div>
 
                 <button type="submit" className="btn btn-dark">Submit</button>

@@ -112,14 +112,20 @@ router.post('/seekUser', fetchUser, async (req, res) => {
         res.json(user);
     } catch (error) {
         console.error(error.message);
-        res.status(500).send("An internal server error occured !");
+        res.status(500).json({ success, error: "An internal server error occured !" });
     }
 
 })
 
 // Route 4 : Trying to edit the user 
 
-router.put('/updateUser/:id', fetchUser, async (req, res) => {
+router.put('/updateUser/:id', [
+    body('email', 'Please Enter a valid email').isEmail(),
+    body('oldpassword', 'Password cannot be blank').exists()
+], fetchUser, async (req, res) => {
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) { return res.status(400).json({ success, error: result.array() }) }
 
     const { name, email, oldpassword, newpassword } = req.body;
 
