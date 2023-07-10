@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const Signature = 'A_SecretPassword_ForSignature';
 const fetchUser = require('../middleware/fetchuser');
 const success = false;
-// if(Signature === null){console.log("Not found ")}else {console.log(Signature)};
+
 // ==>> ROUTE 1 ; Creating User , endpoint : /api/auth/createUser
 router.post('/createUser', [
     // Checking with bcrypt according to the body of the request : name,email,password
@@ -152,6 +152,25 @@ router.put('/updateUser/:id', [
     } catch (error) {
         console.error(error);
         res.status(500).json({ success, error: 'An internal server error occured' })
+    }
+})
+
+router.delete('/deleteUser', fetchUser, async (req, res) => {
+
+    try {
+        let FoundUser = await User.findById(req.user.id);
+        if (!FoundUser) { return res.status(404).json({ success, error: 'Please verify the authentication or check your credentials' }) }
+        if (!   await (bcrypt.compare(req.body.password, FoundUser.password))) { return res.status(401).json({ success, error: 'Unauthorized person not allowed ! ' }) }
+
+        FoundUser = await User.findByIdAndDelete(req.user.id);
+        if (FoundUser) {
+            res.json({ success: !success, FoundUser });
+        } else { 
+            res.json({ success, error: 'An internal server error occured ! ' });
+        }
+    } catch (error) {
+        console.error(error.message);
+        res.json({ success, error: 'An internal server error occured ! ' });
     }
 })
 

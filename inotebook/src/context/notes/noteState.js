@@ -1,7 +1,7 @@
 import NoteContext from "./noteContext";
 import { useState } from "react";
 
-//********************************Implement environment variables and let the user data be edit 
+//********************************Implement environment variables and Modify the Modal.js
 
 const NoteState = ({ children }) => {
 
@@ -114,8 +114,26 @@ const NoteState = ({ children }) => {
 
   }
 
+  const delteAllNotes= async ()=>{
+    const req = await fetch(`${host}/notes/deleteAllNotes`,{
+      method : 'DELETE',
+      headers : {
+        "auth-token": localStorage.getItem('auth-token')
+      }
+    })
+    const res = await req.json();
+
+    if(res.success){
+      ShowAlert(res.message,'success');
+      return true;
+    }else{
+      ShowAlert(res.error,'danger');
+      return false;
+    }
+  }
+  
   return (
-    <NoteContext.Provider value={{ notes, addNote, deleteNote, AlertContent, ShowAlert, getNotes, updateNote ,setUserData,GetUser,UserData,PrintDate}}>
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, AlertContent, ShowAlert, getNotes, updateNote,delteAllNotes ,setUserData,GetUser,UserData,PrintDate}}>
       {children}
     </NoteContext.Provider>
   )

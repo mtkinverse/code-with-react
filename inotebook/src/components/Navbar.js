@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import noteContext from '../context/notes/noteContext';
+import Modal from '../Modal';
 
 function Navbar() {
 
@@ -14,19 +15,20 @@ function Navbar() {
   const CloseButton = useRef()
   const oldPassContainer = useRef();
   const newPassContainer = useRef();
+  const DelAccountConfirmationButton = useRef();
 
 
   onchange = (e) => {
     context.setUserData({ ...context.UserData, [e.target.name]: e.target.value })
   }
 
-  const changeTempOne = (e)=>{ // another type of onChange
-    setTempPass({...TempPass,[e.target.name]:e.target.value})
+  const changeTempOne = (e) => { // another type of onChange
+    setTempPass({ ...TempPass, [e.target.name]: e.target.value })
   }
 
   const UpdateUser = async () => {
 
-    const { name, email, id} = context.UserData;
+    const { name, email, id } = context.UserData;
 
     const req = await fetch(`${host}/auth/updateUser/${id}`, {
       method: 'PUT',
@@ -34,20 +36,23 @@ function Navbar() {
         "auth-token": localStorage.getItem('auth-token'),
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ name, email, oldpassword : TempPass.oldpassword, newpassword : TempPass.newpassword ? TempPass.newpassword : TempPass.oldpassword})
+      body: JSON.stringify({ name, email, oldpassword: TempPass.oldpassword, newpassword: TempPass.newpassword ? TempPass.newpassword : TempPass.oldpassword })
     })
     const res = await req.json();
     if (res.success) {
-      setTempPass({oldpassword:'',newpassword:''})
-      oldPassContainer.current.value=''
-      newPassContainer.current.value='';
+      setTempPass({ oldpassword: '', newpassword: '' })
+      oldPassContainer.current.value = ''
+      newPassContainer.current.value = '';
       CloseButton.current.click();
       context.ShowAlert('Iformation Updated ! ', 'success');
-    }else{
-      context.ShowAlert(res.error,'danger');
+    } else {
+      CloseButton.current.click();
+      context.ShowAlert(res.error, 'danger');
     }
 
   }
+
+  
 
   const LogOut = () => {
 
@@ -55,6 +60,7 @@ function Navbar() {
     navigate('/login');
 
   }
+
   return (
     <>
       <nav className="navbar bg-dark navbar-expand-lg bg-body-tertiary " data-bs-theme='dark'>
@@ -90,7 +96,8 @@ function Navbar() {
                     <li className='dropdown-item'>{context.UserData.email}</li>
                     <li className='dropdown-item'>Created on : {context.PrintDate(context.UserData.date)}</li>
                     <li className='dropdown-item'><hr /></li>
-                    <li className='dropdown-item' style={{ cursor: 'pointer' }} onClick={()=>{OpenButton.current.click()}}><b>Edit Account Info</b></li>
+                    <li className='dropdown-item' style={{ cursor: 'pointer' }} onClick={() => { OpenButton.current.click() }}><b>Edit Account Info</b></li>
+                    <li className='dropdown-item' style={{ cursor: 'pointer' }} onClick={ () => { DelAccountConfirmationButton.current.click();} }><b>Delete Account</b></li>
                   </ul>
                 </div>
                 <button className='btn btn-sm btn-light mx-1' onClick={LogOut}>Logout</button>
@@ -102,14 +109,14 @@ function Navbar() {
       </nav>
       {/* ---------------------------------------------------------------------------------------------------------- */}
 
-      <button type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal" ref={OpenButton}>
+      <button type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#UserInfo" ref={OpenButton}>
       </button>
 
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade" id="UserInfo" tabIndex="-1" aria-labelledby="UserInfoLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+              <h1 className="modal-title fs-5" id="UserInfoLabel">User Info</h1>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -146,6 +153,11 @@ function Navbar() {
           </div>
         </div>
       </div>
+      {/* ------------------------ A new Modal for deleting the user account ------------------------------ */}
+      
+<button type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#DelAccountConfirmation" ref={DelAccountConfirmationButton}>
+</button>
+<Modal/>
     </>
   )
 }

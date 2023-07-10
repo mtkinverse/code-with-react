@@ -77,13 +77,30 @@ router.delete('/deletenote/:id', fetchUser, async (req, res) => {
 
         if (!note) { return res.status(404).send("No note is found against the specified id ! ") }
         if (note.user.toString() !== req.user.id) { return res.status(401).send("Unauthorized person not allowed ! ") }
-        
-        note =await Notes.findByIdAndDelete(req.params.id);
+
+        note = await Notes.findByIdAndDelete(req.params.id);
         res.json({ Deleted: 'notes deleted successfully !', note: note });
 
     } catch (error) {
         console.error(error.message);
         res.status(500).send("An internal sever error occured ! ");
+    }
+})
+
+router.delete('/deleteAllNotes', fetchUser, async (req, res) => {
+    try {
+        const FoundNotes = await Notes.find({ user: req.user.id });
+        if (!FoundNotes) { return res.status(404).json({ success: false, error: 'Plese recheck your credentials and try again' }) }
+        let i = 0;
+        while (i !== FoundNotes.length) {
+            const deleted = await Notes.findByIdAndDelete(FoundNotes[i]._id);
+            if (!deleted) { return res.status(500).json({ success: false, error: ' Some notes cannot be deleted , internal server error ' }) }
+            i++;
+        }
+        res.json({ success: true, message: `${i} Notes have been deleted ` })
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ success: false, error: 'An internal server error occured ! ' });
     }
 })
 
