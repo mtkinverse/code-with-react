@@ -1,14 +1,13 @@
 import NoteContext from "./noteContext";
 import { useState } from "react";
 
-//********************************Implement environment variables and Modify the Modal.js
-
 const NoteState = ({ children }) => {
 
   const host = 'http://localhost:5000/api';
   const [notes, setNotes] = useState([]);
   const [AlertContent, AlertIt] = useState({});
-  const [UserData , setUserData] = useState({name:'',date:'',email:'',id:''});
+  const [UserData, setUserData] = useState({ name: '', date: '', email: '', id: '' });
+  const [currentNote, setCurrentNote] = useState({ titleEdit: '', descriptionEdit: '', commentsEdit: '', id: '' });
 
   const ShowAlert = (message, type) => {
     AlertIt({ message, type });
@@ -20,21 +19,21 @@ const NoteState = ({ children }) => {
 
   const PrintDate = (DateInMs) => {
     // return date.getDay();  
-    const date = new Date(parseInt(DateInMs));      
+    const date = new Date(parseInt(DateInMs));
     const format = { day: '2-digit', month: '2-digit', year: '2-digit' };
     return date.toLocaleDateString(undefined, format);
     // 
-}
+  }
 
   const GetUser = async () => {
-    const req = await fetch(`${host}/auth/seekUser` , {
-      method:'POST',
-      headers:{
-        'auth-token':localStorage.getItem('auth-token')
+    const req = await fetch(`${host}/auth/seekUser`, {
+      method: 'POST',
+      headers: {
+        'auth-token': localStorage.getItem('auth-token')
       }
     })
     const res = await req.json();
-    setUserData({name : res.name,date:res.date,email:res.email,id:res._id});
+    setUserData({ name: res.name, date: res.date, email: res.email, id: res._id });
 
   }
 
@@ -114,26 +113,26 @@ const NoteState = ({ children }) => {
 
   }
 
-  const delteAllNotes= async ()=>{
-    const req = await fetch(`${host}/notes/deleteAllNotes`,{
-      method : 'DELETE',
-      headers : {
+  const delteAllNotes = async () => {
+    const req = await fetch(`${host}/notes/deleteAllNotes`, {
+      method: 'DELETE',
+      headers: {
         "auth-token": localStorage.getItem('auth-token')
       }
     })
     const res = await req.json();
 
-    if(res.success){
-      ShowAlert(res.message,'success');
+    if (res.success) {
+      ShowAlert(res.message, 'success');
       return true;
-    }else{
-      ShowAlert(res.error,'danger');
+    } else {
+      ShowAlert(res.error, 'danger');
       return false;
     }
   }
-  
+
   return (
-    <NoteContext.Provider value={{ notes, addNote, deleteNote, AlertContent, ShowAlert, getNotes, updateNote,delteAllNotes ,setUserData,GetUser,UserData,PrintDate}}>
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, AlertContent, ShowAlert, getNotes, updateNote, delteAllNotes, setUserData, GetUser, UserData, PrintDate,currentNote,setCurrentNote }}>
       {children}
     </NoteContext.Provider>
   )

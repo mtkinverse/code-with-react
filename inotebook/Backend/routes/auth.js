@@ -4,7 +4,7 @@ const User = require('../modules/User');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Signature = 'A_SecretPassword_ForSignature';
+const Signature = process.env.SIGNATURE;
 const fetchUser = require('../middleware/fetchuser');
 const success = false;
 
