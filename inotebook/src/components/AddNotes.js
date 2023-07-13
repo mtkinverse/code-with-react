@@ -24,9 +24,9 @@ function AddNotes() {
   }
 
   return (
-    <div className='my-2'>
-      <h3>Add a new note :</h3>
-      <form className='my-2'>
+    <div className='container my-4 border-5 border-secondary border-bottom border-start '>
+      <h3 className='mx-2'>&#10003; Add a new note :</h3>
+      <form className='my-2 mx-2'>
         <div className="mb-3">
           <label htmlFor="title" className="form-label"><h6>Enter Title :</h6></label>
           <input type="text" className="form-control" id="title" name='title' aria-describedby="emailHelp" onChange={onChange} placeholder='Select an attractive title' />
