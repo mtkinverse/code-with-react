@@ -37,7 +37,7 @@ function Signup() {
   }
 
   return (
-    <div className='container my-2'>
+    <div className='container my-2'  style={{ width: '700px' }}>
       <h4>Please Signup to <code style={{ fontSize: 'xx-large' }}>iNoteBook</code></h4>
       <form onSubmit={CreateUser}>
         <div className="mb-3">
@@ -56,7 +56,9 @@ function Signup() {
           <label htmlFor="passwordConfirm" className="form-label">Confirm Password</label>
           <input type="password" className="form-control" id="passwordConfirm" onChange={onChange} name="passwordConfirm" minLength={4} required />
         </div>
+        <div className='d-flex justify-content-end'>
         <button type="submit" className="btn btn-dark">Submit</button>
+        </div>
       </form>
     </div>
   )

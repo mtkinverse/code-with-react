@@ -4,14 +4,13 @@ import noteContext from '../context/notes/noteContext';
 import NotesContent from './NotesContent';
 import { useNavigate } from 'react-router-dom';
 
-
 function Notes() {
 
     const ref = useRef(null);
     const navigate = useNavigate();
     const context = useContext(noteContext);
     const { notes, getNotes } = context;
-    const [AtBottom,ToggleScroll]=useState();
+    const [AtBottom, ToggleScroll] = useState();
 
     useEffect(() => {
 
@@ -46,8 +45,8 @@ function Notes() {
 
         // eslint-disable-next-line
     }, []);
-    const MoveTop = ()=>{
-        window.scrollTo({top:0,behavior:'smooth'});
+    const MoveTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     const LetNoteEdit = (Newnote) => {
         context.setCurrentNote({ titleEdit: Newnote.title, descriptionEdit: Newnote.description, commentsEdit: Newnote.comments, id: Newnote._id });
@@ -73,9 +72,12 @@ function Notes() {
 
             </div>
             <div className={`d-flex justify-content-end my-4 ${AtBottom ? '' : 'd-none'}`} style={{ height: '50px' }}>
-                <button className="mx-2 btn btn-light rounded-circle" onClick={MoveTop}>
-                    <i class="fa-solid fa-arrow-up fa-bounce fa-2xl"></i>
+
+                <div>
+                    <button className="mx-2 btn btn-light rounded-circle" onClick={MoveTop}>
+                        <i className="fa-solid fa-arrow-up fa-bounce fa-2xl " ></i>
                     </button>
+                </div>
             </div>
         </>
     )

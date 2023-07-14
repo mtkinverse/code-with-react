@@ -37,20 +37,21 @@ function Login() {
 
     return (
 
-        <div className='container my-2'>
+        <div className='container my-2' style={{ width: '700px' }}>
             <h4>Please Login to <code style={{ fontSize: 'xx-large' }}>iNoteBook</code></h4>
             <form onSubmit={CheckUser}>
-                <div className="mb-3">
+                <div className="my-4">
                     <label htmlFor="email" className="form-label">Email address</label>
-                    <input type="email" className="form-control" id="email" name="email" value={Values.email} onChange={onChange} aria-describedby="emailHelp" required/>
+                    <input type="email" className="form-control" id="email" name="email" value={Values.email} onChange={onChange} aria-describedby="emailHelp" required />
 
                 </div>
-                <div className="mb-3">
+                <div className="my-4">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" id="password" name="password" value={Values.password} onChange={onChange}minLength={4} required/>
+                    <input type="password" className="form-control" id="password" name="password" value={Values.password} onChange={onChange} minLength={4} required />
                 </div>
-
-                <button type="submit" className="btn btn-dark">Submit</button>
+                <div className='d-flex justify-content-end'>
+                    <button type="submit" className="btn btn-dark">Submit</button>
+                </div>
             </form>
         </div>
     )
