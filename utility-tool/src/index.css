@@ -176,6 +176,13 @@ nav {
   font-size: x-large;
 }
 
+.covering-box {
+  position: relative;
+  right: 0%;
+  margin: 4%;
+  min-width: 50%;
+}
+
 .rightValues {
   position: relative;
   right: 0%;
