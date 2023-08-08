@@ -231,7 +231,7 @@ nav {
   justify-content: center;
   flex-direction: row;
   align-items: flex-start;
-  flex-wrap: wrap-reverse;
+  flex-wrap: wrap;
 }
 
 .modalFocus {

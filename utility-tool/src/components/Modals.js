@@ -11,6 +11,7 @@ function Modals(props) {
         document.getElementById(id).style.display = 'none';
         document.getElementById('Home').classList.remove('blur-box')
         document.getElementById('AllValuesHolder').classList.remove('blur-box')
+        window.scrollTo(0,props.PrevPosition)
     }
     
     const SubmitIt = (e, id, index) => {

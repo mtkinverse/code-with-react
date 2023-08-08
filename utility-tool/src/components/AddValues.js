@@ -8,14 +8,15 @@ function AddValues() {
     const [Items, setItems] = useState([]);
     const [numbox, setNumbox] = useState(1);
     const [nameHolder, NameEditor] = useState('');
+    const [PrevPosition,setPosition] = useState();
 
 
     const DownloadDiv = (id, name, DivToBeHide) => {
 
         const box = document.getElementById(id);
         const hidingBox = document.getElementById(DivToBeHide);
-        const prevCont = hidingBox.innerHTML;
-        box.setAttribute('style','width:500px;')
+        box.setAttribute('style','width:500px;');
+        const prevDisp  = hidingBox.style.display;
         hidingBox.style.display='none';
 
         html2Canvas(box).then((canvas) => {
@@ -27,8 +28,7 @@ function AddValues() {
         })
 
         box.removeAttribute('style');
-        hidingBox.innerHTML=prevCont;
-        hidingBox.style.display='flex';
+        hidingBox.style.display=prevDisp;
     }
 
     const OpenModal = (index) => {
@@ -38,6 +38,7 @@ function AddValues() {
             document.getElementById('Home').classList.add('blur-box')
             document.getElementById('AllValuesHolder').classList.add('blur-box')
             reqModal.style.display = 'flex';
+            setPosition(window.scrollY);
             reqModal.scrollIntoView({ behavior: 'smooth' });
             reqModal.focus()
         } else {
@@ -101,7 +102,7 @@ function AddValues() {
                 <button className='submitButton' onClick={AddNewBox}>Add new box</button>
             </div>
 
-            <Modals NameEditor={NameEditor} nameHolder={nameHolder} Items={Items} setItems={setItems} />
+            <Modals NameEditor={NameEditor} nameHolder={nameHolder} Items={Items} setItems={setItems} PrevPosition={PrevPosition} />
 
 
         </>
