@@ -64,6 +64,47 @@ function Modals(props) {
         }
     }
 
+    const editItem = (e) => {
+        
+        e.preventDefault();
+        const updatedOne = [...props.Items];
+        let processed = false;
+
+        updatedOne.forEach(ele => {
+
+            if (ele.id === props.item.id) {
+                console.log('id found');
+                ele.items.forEach(newEle => {
+                    if (newEle.name === props.item.prevName) {
+                        
+                        ele.total -= parseInt(newEle.value);
+                        ele.total+= parseInt(props.item.value);
+                        dispatch(actionCreators.subtractMoney(parseInt(newEle.value)));
+                        dispatch(actionCreators.AddMoney(parseInt(props.item.value)));
+                        
+                        newEle.name = props.item.name;
+                        newEle.value = props.item.value;
+                        processed=true;
+                        
+                        return;
+                    }else{ console.log('item not matched',newEle.name,props.item.prevName)}
+                    return;
+                })
+            }else {console.log('id not matched',ele.id,props.item.id);}
+        })
+        
+        props.Items.forEach(Item=>{
+            if(Item.id === props.item.id){
+                
+            }
+        })
+        props.setItem({name:'',value:0,id:'',prevName:''})
+        props.setItems(updatedOne);
+        CloseModal('itemEditor')
+        if(processed){console.log('done')}
+        else console.log("not done")
+    }
+
     return (
         <div className='modals'>
             {//esilent-disable-next-line
@@ -92,6 +133,18 @@ function Modals(props) {
                     </>
                 })
             }
+            <div className='InsertValues' id={`itemEditor`}>
+                <form onSubmit={editItem}>
+                    <label htmlFor='itemEditor-name'><h3>Name:</h3></label>
+                    <input type='text' value={props.item.name} onChange={e=>{const updatedOne={...props.item,name:e.target.value};props.setItem(updatedOne)}} required/>
+                    
+                    <label htmlFor='itemEditor-value'><h3>Value:</h3></label>
+                    <input type='number' min={0} value={props.item.value} onChange={e=>{const updatedOne={...props.item,value:e.target.value};props.setItem(updatedOne)}} required/>
+                    <br/>
+                    <button className='submitButton' >Done</button>
+                    <button className='submitButton' onClick={e=>{e.preventDefault();props.setItem({name:'',value:0,id:'',prevName:''});CloseModal('itemEditor')}}>Cancle</button>
+                </form>
+            </div>
         </div>
     )
 }
