@@ -6,8 +6,8 @@ function Item(props) {
    
     const ShowIcons = (id) => {
         const reqDiv = document.getElementById('iconBox-'+id);
-        if(reqDiv.style.display === 'none') {reqDiv.style.display = 'flex';}
-        else{ reqDiv.style.display = 'none';}
+        if(reqDiv.style.display === 'flex') {reqDiv.style.display = 'none';}
+        else{ reqDiv.style.display = 'flex';}
     }
     return (
         <>

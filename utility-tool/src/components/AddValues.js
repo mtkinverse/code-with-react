@@ -13,16 +13,41 @@ function AddValues() {
     const [numbox, setNumbox] = useState(1);
     const [nameHolder, NameEditor] = useState('');
     const [PrevPosition, setPosition] = useState();
-    const [item,setItem]=useState({name:'',value:0,id:'',prevName:''});
+    const [item, setItem] = useState({ name: '', value: 0, id: '', prevName: '' });
 
 
     const DownloadDiv = (id, name, DivToBeHide) => {
 
         const box = document.getElementById(id);
         const hidingBox = document.getElementById(DivToBeHide);
-        box.setAttribute('style', 'width:500px;');
+        const badges = document.getElementsByClassName('badge');
+        const DToggler = document.getElementsByClassName('DopdownToggler')
+
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            // Code for mobile view
+            box.setAttribute('style', 'width:500px;');
+            Array.from(DToggler).forEach(ele => {
+                ele.style.display = 'none';
+            })
+        } else {
+            Array.from(badges).forEach(badge => {
+                badge.setAttribute('style', 'display:none;')
+            })
+            box.setAttribute('style', 'width:500px;color:white;');
+        }
+
+
+
         const prevDisp = hidingBox.style.display;
         hidingBox.style.display = 'none';
+
+        const CloseButton = document.getElementsByClassName('close-button');
+        Array.from(CloseButton).forEach(ele => {
+            ele.style.display = 'none';
+        })
+
 
         html2Canvas(box).then((canvas) => {
             const URL = canvas.toDataURL('image/jpg');
@@ -34,6 +59,21 @@ function AddValues() {
 
         box.removeAttribute('style');
         hidingBox.style.display = prevDisp;
+        Array.from(CloseButton).forEach(ele => {
+            ele.style.display = 'inline';
+        })
+        
+        if (isMobile) {
+            // Code for mobile view
+            Array.from(DToggler).forEach(ele => {
+                ele.style.display = 'flex';
+            })
+        } else {
+            Array.from(badges).forEach(badge => {
+                badge.removeAttribute('style');
+            })
+        }
+
     }
 
     const OpenModal = (index) => {
@@ -60,9 +100,9 @@ function AddValues() {
     const DeleteBox = id => {
 
         let totalToBeDetect = 0;
-        Items.forEach(tempItem =>{
-            if(tempItem.id === id){
-                totalToBeDetect=parseInt(tempItem.total);
+        Items.forEach(tempItem => {
+            if (tempItem.id === id) {
+                totalToBeDetect = parseInt(tempItem.total);
                 return;
             }
         })
@@ -70,9 +110,9 @@ function AddValues() {
         dispatch(actionCreators.subtractMoney(totalToBeDetect));
     }
 
-    const letItemEdit = (ItemName, ItemValue,id) => {
-        
-        setItem({name:ItemName,value:ItemValue,id:id,prevName:ItemName});
+    const letItemEdit = (ItemName, ItemValue, id) => {
+
+        setItem({ name: ItemName, value: ItemValue, id: id, prevName: ItemName });
         OpenModal('itemEditor');
 
     }
@@ -110,7 +150,7 @@ function AddValues() {
                                     Item.items.length > 0 ?
                                         Item.items.map(
                                             ele => {
-                                                return <ValueComp name={ele.name} value={ele.value} id={Item.id} letItemEdit={letItemEdit} DeleteItem={DeleteItem}/>
+                                                return <ValueComp name={ele.name} value={ele.value} id={Item.id} letItemEdit={letItemEdit} DeleteItem={DeleteItem} />
                                             }
                                         )
                                         : <div className='listValues'><li><p>Kindly, Enter values</p></li></div>
@@ -140,7 +180,7 @@ function AddValues() {
                 <button className='submitButton' onClick={AddNewBox}>Add new box</button>
             </div>
 
-            <Modals NameEditor={NameEditor} nameHolder={nameHolder} Items={Items} setItems={setItems} PrevPosition={PrevPosition} item={item} setItem={setItem}/>
+            <Modals NameEditor={NameEditor} nameHolder={nameHolder} Items={Items} setItems={setItems} PrevPosition={PrevPosition} item={item} setItem={setItem} />
 
 
         </>

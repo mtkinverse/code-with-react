@@ -196,6 +196,7 @@ nav {
 .rightValues hr {
   width: 80%;
   height: 0px;
+  color: black;
   filter: blur(1px);
 }
 
@@ -271,6 +272,7 @@ nav {
   list-style: none;
   display: flex;
   justify-content: space-around;
+  color:black;
 }
 
 .listValues li {
