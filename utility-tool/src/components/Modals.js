@@ -124,6 +124,7 @@ function Modals(props) {
                         </div>
                         <div className='InsertValues' key={`NameEditor${index}`} id={`NameEditor${index}`}>
                             <form onSubmit={(e) => { e.preventDefault();EditName(item.id, `NameEditor${index}`) }}>
+                                <label htmlFor='Name-editor-lable'>Enter name:</label>
                                 <input type='text' value={props.nameHolder} onChange={e => { props.NameEditor(e.target.value) }} id={`name-box${index}`} required minLength={4}></input>
                                 <br />
                                 <button type='submit' className='submitButton'>Done</button>
@@ -135,10 +136,10 @@ function Modals(props) {
             }
             <div className='InsertValues' id={`itemEditor`}>
                 <form onSubmit={editItem}>
-                    <label htmlFor='itemEditor-name'><h3>Name:</h3></label>
+                    <label htmlFor='itemEditor-name'>Name:</label>
                     <input type='text' value={props.item.name} onChange={e=>{const updatedOne={...props.item,name:e.target.value};props.setItem(updatedOne)}} required/>
                     
-                    <label htmlFor='itemEditor-value'><h3>Value:</h3></label>
+                    <label htmlFor='itemEditor-value'>Value:</label>
                     <input type='number' min={0} value={props.item.value} onChange={e=>{const updatedOne={...props.item,value:e.target.value};props.setItem(updatedOne)}} required/>
                     <br/>
                     <button className='submitButton' >Done</button>

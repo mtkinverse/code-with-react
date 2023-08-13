@@ -229,6 +229,18 @@ nav {
   text-align: center;
 }
 
+.InsertValues input {
+  height: 1.2rem;
+  font-size: 1rem;
+  background-color: rgb(151 151 229 / 35%);
+  color: black;
+}
+
+.InsertValues form label {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
 .addValues {
   border: 5px solid white;
   border-radius: 5px;
@@ -272,7 +284,7 @@ nav {
   list-style: none;
   display: flex;
   justify-content: space-around;
-  color:black;
+  color: black;
 }
 
 .listValues li {
